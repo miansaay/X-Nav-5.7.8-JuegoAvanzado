@@ -65,7 +65,7 @@ if (princessesCaught == null) {
 //var level = 1;
 var level = localStorage.getItem("nivel");
 if (level == null) {
-   level = 1;
+   level = Math.trunc(princessesCaught/10+1);   
 }
 
 var stone = {};
@@ -96,11 +96,11 @@ var reset = function () {
 	princess.x = 64 + (Math.random() * (canvas.width - 128));
 	princess.y = 64 + (Math.random() * (canvas.height - 128));
 
- // Throw the princess somewhere on the screen randomly
+ // Throw the monster somewhere on the screen randomly
  monster.x = 64 + (Math.random() * (canvas.width - 128));
 	monster.y = 64 + (Math.random() * (canvas.height - 128));
 
- // Throw the princess somewhere on the screen randomly
+ // Throw the stones somewhere on the screen randomly
  for (var i=0; i<=6; i++){
 	  stone.x = 64 + (Math.random() * (canvas.width - 128));
 	  stone.y = 64 + (Math.random() * (canvas.height - 128));
@@ -218,7 +218,8 @@ var update = function (modifier) {
 		&& hero.y <= (monster.y + 16)
 		&& monster.y <= (hero.y + 32)
 	) {
-		princessesCaught=0;
+		princessesCaught = 0;
+  level = Math.trunc(princessesCaught/10+1);
 		reset();
 	}
 
@@ -231,10 +232,8 @@ var update = function (modifier) {
 	) {
 		++princessesCaught;
   localStorage.setItem("score", princessesCaught);
-  if (princessesCaught == 10) {
-     ++level;
-     localStorage.setItem("nivel", level);
-  }
+  level = Math.trunc(princessesCaught/10+1);
+  localStorage.setItem("nivel", level);
 		reset();
 	}
 };
