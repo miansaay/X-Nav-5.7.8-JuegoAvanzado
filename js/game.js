@@ -68,6 +68,9 @@ if (level == null) {
    level = Math.trunc(princessesCaught/10+1);   
 }
 
+var numStones = 6 + 2*level;
+var numMonsters = 1 + level;
+
 var stone = {};
 var stonex = new Array();
 var stoney = new Array();
@@ -75,6 +78,9 @@ var stoney = new Array();
 var monster = {
 	speed: 180
 };
+ 
+var monsterx = new Array();
+var monstery = new Array();
 
 // Handle keyboard controls
 var keysDown = {};
@@ -97,11 +103,17 @@ var reset = function () {
 	princess.y = 64 + (Math.random() * (canvas.height - 128));
 
  // Throw the monster somewhere on the screen randomly
- monster.x = 64 + (Math.random() * (canvas.width - 128));
-	monster.y = 64 + (Math.random() * (canvas.height - 128));
+ for (var i = 0; i <= numMonsters; i++){
+    monster.x = 64 + (Math.random() * (canvas.width - 128));
+	   monster.y = 64 + (Math.random() * (canvas.height - 128));
+
+    monsterx[i] = monster.x;
+		  monstery[i] = monster.y;
+
+ }
 
  // Throw the stones somewhere on the screen randomly
- for (var i=0; i<=6; i++){
+ for (var i = 0; i <= numStones; i++){
 	  stone.x = 64 + (Math.random() * (canvas.width - 128));
 	  stone.y = 64 + (Math.random() * (canvas.height - 128));
 
@@ -169,28 +181,28 @@ var update = function (modifier) {
 	if (38 in keysDown) { // Player holding up
 
 		if (hero.y > monster.y){
-			monster.y += monster.speed *modifier;
+			monster.y += monster.speed *modifier*level;
 		}else if(hero.y < monster.y ){
-			monster.y -= monster.speed *modifier;
+			monster.y -= monster.speed *modifier*level;
 		}
 	}
 	if (40 in keysDown) { // Player holding down
 		if (hero.y > monster.y){
-			monster.y += monster.speed *modifier;
+			monster.y += monster.speed *modifier*level;
 		}else if(hero.y < monster.y ){
-			monster.y -= monster.speed *modifier;
+			monster.y -= monster.speed *modifier*level;
 		}
 	}
 	if (37 in keysDown) { // Player holding left
 		if (hero.x > monster.x){
-			monster.x += monster.speed *modifier;
+			monster.x += monster.speed *modifier*level;
 		}else if(hero.x < monster.x ){
-			monster.x -= monster.speed *modifier;
+			monster.x -= monster.speed *modifier*level;
 		}
 	}
 
  //Stones
- for (var i=0; i<=6; i++){
+ for (var i= 0; i <= numStones; i++){
 		 if (
 			 hero.x <= (stonex[i] + 24)
 			 && stonex[i] <= (hero.x + 24)
@@ -220,6 +232,7 @@ var update = function (modifier) {
 	) {
 		princessesCaught = 0;
   level = Math.trunc(princessesCaught/10+1);
+  numStones = 6 + 2*level;
 		reset();
 	}
 
@@ -258,13 +271,13 @@ var render = function () {
 	//}
 
  if (stoneReady) {
-		for (var i=0; i<=6; i++){
+		for (var i = 0; i <= numStones; i++){
 			ctx.drawImage(stoneImage, stonex[i], stoney[i]);
 		}
 	}
 
  if (monsterReady) {
-		ctx.drawImage(monsterImage, monster.x, monster.y);
+	  ctx.drawImage(monsterImage, monster.x, monster.y); 
 	}
 
 	// Score
